@@ -1,2 +1,4 @@
-# craftcms-aws
-Craft CMS on AWS.
+Craft CMS Demo
+==============
+
+A simple site using Craft CMS.
