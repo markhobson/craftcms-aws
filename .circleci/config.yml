@@ -1,8 +1,7 @@
 version: 2
 jobs:
   build:
-    docker:
-      - image: docker
+    machine: true
     working_directory: ~/craftcms-demo
     steps:
       - checkout
