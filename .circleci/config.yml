@@ -5,8 +5,6 @@ jobs:
     working_directory: ~/craftcms-demo
     steps:
       - checkout
-      - setup_remote_docker:
-          docker_layer_caching: true
       # TODO: Pull up to Docker image
       - run:
           name: Install AWS CLI
