@@ -13,5 +13,13 @@ jobs:
           name: Install AWS CLI
           command: pip install awscli --upgrade --user
       - run:
-          name: Build and push Docker image
-          command: ./build.sh
+          name: Build Docker image
+          command: docker build -t craftcms-demo .
+      - run:
+          name: Log Docker into AWS Docker registry
+          command: $(aws ecr get-login --no-include-email)
+      - run:
+          name: Push Docker image to AWS Docker registry
+          command: |
+            docker tag craftcms-demo ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/craftcms-demo
+            docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/craftcms-demo
