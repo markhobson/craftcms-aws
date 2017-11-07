@@ -9,4 +9,4 @@ jobs:
       - setup_remote_docker:
           docker_layer_caching: true
       - run:
-          ./build.sh
+          docker build -t craftcms-demo .
