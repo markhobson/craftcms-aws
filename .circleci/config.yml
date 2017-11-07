@@ -1,6 +1,7 @@
 version: 2
 jobs:
   build:
+    # TODO: Use Docker executor with custom image
     machine: true
     working_directory: ~/craftcms-demo
     steps:
