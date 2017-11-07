@@ -8,5 +8,10 @@ jobs:
       - checkout
       - setup_remote_docker:
           docker_layer_caching: true
+      # TODO: Pull up to Docker image
       - run:
-          ./build.sh
+          name: Install AWS CLI
+          command: pip install awscli --upgrade --user
+      - run:
+          name: Build and push Docker image
+          command: ./build.sh
