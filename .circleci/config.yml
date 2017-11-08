@@ -20,15 +20,15 @@ jobs:
           command: ecs-cli configure --region ${AWS_DEFAULT_REGION} --access-key ${AWS_ACCESS_KEY_ID} --secret-key ${AWS_SECRET_ACCESS_KEY} --cluster craftcms-demo
       - run:
           name: Build Docker image
-          command: docker build -t site .
+          command: docker build -t craftcms-demo .
       - run:
           name: Log Docker into AWS ECR
           command: $(aws ecr get-login)
       - run:
           name: Push Docker image to AWS ECR
           command: |
-            docker tag site ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/craftcms-demo/site
-            docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/craftcms-demo/site
+            docker tag craftcms-demo ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/craftcms-demo
+            docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/craftcms-demo
       - run:
           name: Deploy Docker image to AWS ECS
           command: ecs-cli compose up
