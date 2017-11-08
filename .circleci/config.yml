@@ -14,10 +14,10 @@ jobs:
           name: Build Docker image
           command: docker build -t craftcms-demo .
       - run:
-          name: Log Docker into AWS Docker registry
+          name: Log Docker into AWS ECR
           command: $(aws ecr get-login)
       - run:
-          name: Push Docker image to AWS Docker registry
+          name: Push Docker image to AWS ECR
           command: |
             docker tag craftcms-demo ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/craftcms-demo
             docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/craftcms-demo
