@@ -27,7 +27,7 @@
 	{# Customise this index template with an image from the web assets #}
 	<img src="newspaper.png"/>
 
-	<h2>Recent News</h2>
+	<h2>Recent News!</h2>
 	<ul>
 		{% for entry in craft.entries.section('news').limit(5).find() %}
 			<li><a href="{{ entry.url }}">{{ entry.title }}</a></li>
