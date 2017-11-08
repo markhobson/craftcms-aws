@@ -1,5 +1,5 @@
 site:
-  image: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/craftcms-demo/site
+  image: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/craftcms-demo
   environment:
     CRAFT_DATABASE_HOST: database
     CRAFT_DATABASE_USER: craft
