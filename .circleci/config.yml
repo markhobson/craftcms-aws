@@ -17,7 +17,9 @@ jobs:
             sudo chmod +x /usr/local/bin/ecs-cli
       - run:
           name: Configure AWS ECS CLI
-          command: ecs-cli configure --region ${AWS_DEFAULT_REGION} --access-key ${AWS_ACCESS_KEY_ID} --secret-key ${AWS_SECRET_ACCESS_KEY} --cluster craftcms-demo
+          command: |
+            ecs-cli configure profile --profile-name default --access-key ${AWS_ACCESS_KEY_ID} --secret-key ${AWS_SECRET_ACCESS_KEY}
+            ecs-cli configure --cluster craftcms-demo --region ${AWS_DEFAULT_REGION} --config-name default
       - run:
           name: Build Docker image
           command: docker build -t craftcms-demo .
