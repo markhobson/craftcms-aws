@@ -12,12 +12,12 @@ jobs:
           command: pip install awscli --upgrade --user
       - run:
           name: Build Docker image
-          command: docker build -t craftcms-demo .
+          command: docker build -t site .
       - run:
           name: Log Docker into AWS ECR
           command: $(aws ecr get-login)
       - run:
           name: Push Docker image to AWS ECR
           command: |
-            docker tag craftcms-demo ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/craftcms-demo
-            docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/craftcms-demo
+            docker tag site ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/craftcms-demo/site
+            docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/craftcms-demo/site
