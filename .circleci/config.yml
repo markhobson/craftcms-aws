@@ -6,10 +6,18 @@ jobs:
     working_directory: ~/craftcms-demo
     steps:
       - checkout
-      # TODO: Pull up to Docker image
+      # TODO: Pull up installations to Docker image
       - run:
           name: Install AWS CLI
           command: pip install awscli --upgrade --user
+      - run:
+          name: Install AWS ECS CLI
+          command: |
+            sudo curl -o /usr/local/bin/ecs-cli https://s3.amazonaws.com/amazon-ecs-cli/ecs-cli-linux-amd64-latest
+            sudo chmod +x /usr/local/bin/ecs-cli
+      - run:
+          name: Configure AWS ECS CLI
+          command: ecs-cli configure --region ${AWS_DEFAULT_REGION} --access-key ${AWS_ACCESS_KEY_ID} --secret-key ${AWS_SECRET_ACCESS_KEY} --cluster craftcms-demo
       - run:
           name: Build Docker image
           command: docker build -t site .
@@ -21,3 +29,6 @@ jobs:
           command: |
             docker tag site ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/craftcms-demo/site
             docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/craftcms-demo/site
+      - run:
+          name: Deploy Docker image to AWS ECS
+          command: ecs-cli compose up
