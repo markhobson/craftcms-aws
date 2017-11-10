@@ -5,6 +5,7 @@ jobs:
       - image: markhobson/craftcms-demo-primary
     working_directory: ~/craftcms-demo
     steps:
+      - setup_remote_docker
       - checkout
       - run:
           name: Configure AWS ECS CLI
