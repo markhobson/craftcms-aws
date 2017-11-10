@@ -20,4 +20,4 @@ database:
   ports:
     - "3306:3306"
   volumes:
-    - /var/lib/mysql
+    - /ecs/data:/var/lib/mysql
