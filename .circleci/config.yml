@@ -1,7 +1,8 @@
 version: 2
 jobs:
   build:
-    docker: markhobson/craftcms-demo-primary
+    docker:
+      - image: markhobson/craftcms-demo-primary
     working_directory: ~/craftcms-demo
     steps:
       - checkout
