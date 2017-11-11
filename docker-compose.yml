@@ -19,5 +19,3 @@ database:
     MYSQL_DATABASE: craft
   ports:
     - "3306:3306"
-  volumes:
-    - /var/lib/mysql
