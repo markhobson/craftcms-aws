@@ -7,7 +7,8 @@
     "css-compile": "node-sass src/scss/stylesheet.scss dist/css/stylesheet.css",
     "css-minify": "cleancss --output dist/css/stylesheet.min.css dist/css/stylesheet.css",
     "css-prefix": "postcss dist/css/stylesheet.css --replace --use autoprefixer",
-    "dist": "npm run css"
+    "public": "cp -r src/public/* dist",
+    "dist": "npm run css && npm run public"
   },
   "repository": {
     "type": "git",
