@@ -1,3 +1,7 @@
+site:
+  volumes:
+    - ./templates:/var/www/craft/templates
+
 database:
   volumes:
     - /var/lib/mysql
