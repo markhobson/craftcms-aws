@@ -1,6 +1,6 @@
 site:
   volumes:
-    - ./templates:/var/www/craft/templates
+    - ./src/templates:/var/www/craft/templates
 
 database:
   volumes:
