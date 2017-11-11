@@ -30,4 +30,4 @@ jobs:
             docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/craftcms-demo
       - run:
           name: Deploy Docker image to AWS ECS
-          command: ecs-cli compose up -f docker-compose.yml -f docker-compose.aws.yml
+          command: ecs-cli compose -f docker-compose.yml -f docker-compose.aws.yml up
