@@ -27,7 +27,7 @@
       {% for entry in craft.entries.section('news').limit(5).find() %}
         <div class="blog-post">
           <h2 class="blog-post-title">{{ entry.title }}</h2>
-          <p class="blog-post-meta">January 1, 2014 by <a href="#">Mark</a></p>
+          <p class="blog-post-meta">{{ entry.postDate|date("F d, Y") }} by <a href="#">{{ entry.author }}</a></p>
 
           {{ entry.body }}
         </div><!-- /.blog-post -->
