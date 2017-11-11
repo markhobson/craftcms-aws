@@ -1,5 +1,5 @@
 site:
-  image: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/craftcms-demo
+  build: .
   environment:
     CRAFT_DATABASE_HOST: database
     CRAFT_DATABASE_USER: craft
@@ -20,4 +20,4 @@ database:
   ports:
     - "3306:3306"
   volumes:
-    - /ecs/data:/var/lib/mysql
+    - /var/lib/mysql

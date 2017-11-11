@@ -1,0 +1,6 @@
+site:
+  image: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/craftcms-demo
+
+database:
+  volumes:
+    - /ecs/data:/var/lib/mysql
