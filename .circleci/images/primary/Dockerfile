@@ -1,9 +1,9 @@
 FROM docker
 
-# curl & pip
+# curl, pip & Node.js
 
 RUN apk update \
-	&& apk add curl py-pip \
+	&& apk add curl py-pip nodejs \
 	&& rm -rf /var/cache/apk/*
 
 # AWS CLI

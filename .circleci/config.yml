@@ -13,6 +13,11 @@ jobs:
             ecs-cli configure profile --profile-name default --access-key ${AWS_ACCESS_KEY_ID} --secret-key ${AWS_SECRET_ACCESS_KEY}
             ecs-cli configure --cluster craftcms-demo --region ${AWS_DEFAULT_REGION} --config-name default
       - run:
+          name: Build public assets
+          command: |
+            npm install
+            npm run dist
+      - run:
           name: Build Docker image
           command: docker build -t craftcms-demo .
       - run:
