@@ -72,7 +72,7 @@ You can run the site locally as follows:
 
 1. `npm install`
 1. `npm run dist`
-1. `docker-compose up`
+1. `docker-compose up --build`
 1. Visit http://localhost/admin
 
 To watch SCSS:
