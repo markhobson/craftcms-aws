@@ -47,14 +47,18 @@ We'll use the Amazon CLI tools to bring up the necessary infrastructure.
 1. [Install Amazon ECS CLI](http://docs.aws.amazon.com/AmazonECS/latest/developerguide/ECS_CLI_installation.html)
 1. [Configure Amazon ECS CLI](http://docs.aws.amazon.com/AmazonECS/latest/developerguide/ECS_CLI_Configuration.html) using your `admin` user credentials and choosen region:
 
-		ecs-cli configure profile --profile-name default --access-key ${AWS_ACCESS_KEY_ID} --secret-key ${AWS_SECRET_ACCESS_KEY}
-		ecs-cli configure --cluster craftcms-aws --region ${AWS_DEFAULT_REGION} --config-name default
+```sh
+ecs-cli configure profile --profile-name default --access-key ${AWS_ACCESS_KEY_ID} --secret-key ${AWS_SECRET_ACCESS_KEY}
+ecs-cli configure --cluster craftcms-aws --region ${AWS_DEFAULT_REGION} --config-name default
+```
 
 ### 5. Create AWS infrastructure
 
 To create your Amazon ECR and ECS services:
 
-		./bin/aws-up.sh
+```sh
+./bin/aws-up.sh
+```
 
 Note that you'll be charged for these services until they are [destroyed](#destroy-aws-infrastructure).
 
@@ -62,7 +66,9 @@ Note that you'll be charged for these services until they are [destroyed](#destr
 
 Push a change and CircleCI will deploy the site to AWS. Once the job is complete find the site's IP address using:
 
-		ecs-cli ps
+```sh
+ecs-cli ps
+```
 
 Visit `http://<ip-address>/admin` to run the [Craft CMS installer](https://craftcms.com/docs/installing#step-5-run-the-installer). Once complete, visit `http://<ip-address>` to view your site.
 
@@ -77,13 +83,17 @@ You can run the site locally as follows:
 
 To watch SCSS:
 
-		npm run watch
+```sh
+npm run watch
+```
 
 ## Destroy AWS infrastructure
 
 To destroy the services:
 
-		./bin/aws-down.sh
+```sh
+./bin/aws-down.sh
+```
 
 ## TODO
 
