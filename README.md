@@ -88,7 +88,6 @@ To destroy the services:
 ## TODO
 
 * Style news templates
-* Compile Bootstrap JS and use
 * Automate CircleCI primary image build in DockerHub
 * Ensure database is private
 * Prod env
