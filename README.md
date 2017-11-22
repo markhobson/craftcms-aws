@@ -48,7 +48,7 @@ We'll use the Amazon CLI tools to bring up the necessary infrastructure.
 1. [Configure Amazon ECS CLI](http://docs.aws.amazon.com/AmazonECS/latest/developerguide/ECS_CLI_Configuration.html) using your `admin` user credentials and choosen region:
 
 		ecs-cli configure profile --profile-name default --access-key ${AWS_ACCESS_KEY_ID} --secret-key ${AWS_SECRET_ACCESS_KEY}
-		ecs-cli configure --cluster craftcms-demo --region ${AWS_DEFAULT_REGION} --config-name default
+		ecs-cli configure --cluster craftcms-aws --region ${AWS_DEFAULT_REGION} --config-name default
 
 ### 5. Create AWS infrastructure
 

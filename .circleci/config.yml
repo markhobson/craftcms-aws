@@ -2,8 +2,8 @@ version: 2
 jobs:
   build:
     docker:
-      - image: markhobson/craftcms-demo-primary
-    working_directory: ~/craftcms-demo
+      - image: markhobson/craftcms-aws-primary
+    working_directory: ~/craftcms-aws
     steps:
       - setup_remote_docker
       - checkout
@@ -11,7 +11,7 @@ jobs:
           name: Configure AWS ECS CLI
           command: |
             ecs-cli configure profile --profile-name default --access-key ${AWS_ACCESS_KEY_ID} --secret-key ${AWS_SECRET_ACCESS_KEY}
-            ecs-cli configure --cluster craftcms-demo --region ${AWS_DEFAULT_REGION} --config-name default
+            ecs-cli configure --cluster craftcms-aws --region ${AWS_DEFAULT_REGION} --config-name default
       - run:
           name: Build public assets
           command: |
@@ -19,15 +19,15 @@ jobs:
             npm run dist
       - run:
           name: Build Docker image
-          command: docker build -t craftcms-demo .
+          command: docker build -t craftcms-aws .
       - run:
           name: Log Docker into AWS ECR
           command: $(aws ecr get-login --no-include-email)
       - run:
           name: Push Docker image to AWS ECR
           command: |
-            docker tag craftcms-demo ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/craftcms-demo
-            docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/craftcms-demo
+            docker tag craftcms-aws ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/craftcms-aws
+            docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/craftcms-aws
       - run:
           name: Deploy Docker image to AWS ECS
           command: ecs-cli compose -f docker-compose.yml -f docker-compose.aws.yml up

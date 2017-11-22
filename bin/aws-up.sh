@@ -3,7 +3,7 @@
 # Create Amazon ECR
 
 aws ecr create-repository \
-	--repository-name craftcms-demo
+	--repository-name craftcms-aws
 
 # Create Amazon ECS
 

@@ -8,5 +8,5 @@ ecs-cli down \
 # Destroy Amazon ECR
 
 aws ecr delete-repository \
-	--repository-name craftcms-demo \
+	--repository-name craftcms-aws \
 	--force

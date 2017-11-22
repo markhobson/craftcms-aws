@@ -1,7 +1,7 @@
 {
-  "name": "craftcms-demo",
+  "name": "craftcms-aws",
   "version": "1.0.0",
-  "description": "Craft CMS Demo",
+  "description": "Craft CMS on AWS",
   "scripts": {
     "css": "npm run css-compile && npm run css-prefix && npm run css-minify",
     "css-compile": "node-sass src/scss/stylesheet.scss dist/css/stylesheet.css",
@@ -14,11 +14,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@bitbucket.org/markhobson/craftcms-demo.git"
+    "url": "git+https://github.com/markhobson/craftcms-aws.git"
   },
   "author": "Mark Hobson <markhobson@gmail.com>",
   "license": "ASL",
-  "homepage": "https://bitbucket.org/markhobson/craftcms-demo",
+  "bugs": {
+    "url": "https://github.com/markhobson/craftcms-aws/issues"
+  },
+  "homepage": "https://github.com/markhobson/craftcms-aws#readme",
   "devDependencies": {
     "autoprefixer": "^7.1.2",
     "bootstrap": "^4.0.0-beta.2",
