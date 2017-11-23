@@ -22,8 +22,8 @@ We'll use Amazon Web Services to host your site.
 1. Create SSH key `admin-key-pair-london`
 1. Create `ci` user
 1. Create `ci` group with policies:
-	* AmazonEC2ContainerRegistryPowerUser
-	* AmazonEC2ContainerServiceFullAccess (?)
+	* `AmazonEC2ContainerRegistryPowerUser`
+	* `AmazonEC2ContainerServiceFullAccess` (?)
 1. Decide on an AWS region, e.g. `eu-west-2`
 
 ### 3. Configure CircleCI
