@@ -32,7 +32,7 @@ We'll use CircleCI for continuous integration.
 
 1. Sign up to [CircleCI](https://circleci.com/) with your GitHub account if you haven't already done so
 1. Add your forked project
-1. Add the following environment variables to the project with your `ci` user credentials and choosen region:
+1. Add the following environment variables to the project with your `ci` user credentials and chosen region:
 	* `AWS_ACCOUNT_ID`
 	* `AWS_ACCESS_KEY_ID`
 	* `AWS_SECRET_ACCESS_KEY`
@@ -43,9 +43,9 @@ We'll use CircleCI for continuous integration.
 We'll use the Amazon CLI tools to bring up the necessary infrastructure.
 
 1. [Install AWS CLI](http://docs.aws.amazon.com/cli/latest/userguide/installing.html)
-1. [Configure AWS CLI](http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html) using your `admin` user credentials and choosen region
+1. [Configure AWS CLI](http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html) using your `admin` user credentials and chosen region
 1. [Install Amazon ECS CLI](http://docs.aws.amazon.com/AmazonECS/latest/developerguide/ECS_CLI_installation.html)
-1. [Configure Amazon ECS CLI](http://docs.aws.amazon.com/AmazonECS/latest/developerguide/ECS_CLI_Configuration.html) using your `admin` user credentials and choosen region:
+1. [Configure Amazon ECS CLI](http://docs.aws.amazon.com/AmazonECS/latest/developerguide/ECS_CLI_Configuration.html) using your `admin` user credentials and chosen region:
 
 ```sh
 ecs-cli configure profile --profile-name default --access-key ${AWS_ACCESS_KEY_ID} --secret-key ${AWS_SECRET_ACCESS_KEY}
