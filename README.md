@@ -100,7 +100,9 @@ To destroy the services:
 * Style news templates
 * Automate CircleCI primary image build in DockerHub
 * Ensure database is private
-* Prod env
+* Prod/dev environments
+* Fargate
+* CloudFormation
 * RDS
 * DNS
 * SSL
