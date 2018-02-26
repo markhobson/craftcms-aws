@@ -106,3 +106,4 @@ To destroy the services:
 * RDS
 * DNS
 * SSL
+* Local deployment (i.e. execute .circleci/config.yml locally)
