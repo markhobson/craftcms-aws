@@ -4,6 +4,14 @@ Parameters:
   KeyName:
     Type: AWS::EC2::KeyPair::KeyName
     Description: Name of an existing EC2 KeyPair to enable SSH access to the ECS instances.
+  DatabaseUsername:
+    Type: String
+    Description: Master username for the database.
+    Default: craft
+  DatabasePassword:
+    Type: String
+    Description: Master password for the database.
+    Default: password
 
 Mappings:
   AWSRegionToAMI:
@@ -96,9 +104,9 @@ Resources:
         - Name: CRAFT_DATABASE_HOST
           Value: database
         - Name: CRAFT_DATABASE_USER
-          Value: craft
+          Value: !Ref DatabaseUsername
         - Name: CRAFT_DATABASE_PASSWORD
-          Value: password
+          Value: !Ref DatabasePassword
         - Name: CRAFT_DATABASE_NAME
           Value: craft
         Links: [database]
@@ -112,9 +120,9 @@ Resources:
         - Name: MYSQL_ROOT_PASSWORD
           Value: password
         - Name: MYSQL_USER
-          Value: craft
+          Value: !Ref DatabaseUsername
         - Name: MYSQL_PASSWORD
-          Value: password
+          Value: !Ref DatabasePassword
         - Name: MYSQL_DATABASE
           Value: craft
         PortMappings:
