@@ -1,9 +1,6 @@
 AWSTemplateFormatVersion: 2010-09-09
 
 Parameters:
-  KeyName:
-    Type: AWS::EC2::KeyPair::KeyName
-    Description: Name of an existing EC2 KeyPair to enable SSH access to the ECS instances.
   DatabaseUsername:
     Type: String
     Description: Master username for the database.
@@ -78,7 +75,6 @@ Resources:
       InstanceType: t2.micro
       IamInstanceProfile: !Ref Ec2InstanceProfile
       SubnetId: !Ref Subnet
-      KeyName: !Ref KeyName
       UserData:
         Fn::Base64: !Sub |
           #!/bin/bash -xe
