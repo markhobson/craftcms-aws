@@ -1,0 +1,168 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Parameters:
+  KeyName:
+    Type: AWS::EC2::KeyPair::KeyName
+    Description: Name of an existing EC2 KeyPair to enable SSH access to the ECS instances.
+
+Mappings:
+  AWSRegionToAMI:
+    eu-west-2:
+      AMIID: ami-f4e20693
+
+Resources:
+  
+  # ---------------------------------------------------------------------------
+  # VPC
+  # ---------------------------------------------------------------------------
+  
+  Vpc:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      
+  Subnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref Vpc
+      CidrBlock: 10.0.0.0/24
+      MapPublicIpOnLaunch: true
+      
+  SubnetRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref Vpc
+
+  SubnetRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref Subnet
+      RouteTableId: !Ref SubnetRouteTable
+
+  SubnetRoute:
+    Type: AWS::EC2::Route
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref InternetGateway
+      RouteTableId: !Ref SubnetRouteTable
+
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+    
+  AttachGateway:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref Vpc
+      InternetGatewayId: !Ref InternetGateway
+
+  # ---------------------------------------------------------------------------
+  # ECS
+  # ---------------------------------------------------------------------------
+  
+  EcsCluster:
+    Type: AWS::ECS::Cluster
+
+  EcsContainerInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !FindInMap [AWSRegionToAMI, !Ref 'AWS::Region', AMIID]
+      SecurityGroupIds: [!Ref EcsSecurityGroup]
+      InstanceType: t2.micro
+      IamInstanceProfile: !Ref Ec2InstanceProfile
+      SubnetId: !Ref Subnet
+      KeyName: !Ref KeyName
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash -xe
+          echo ECS_CLUSTER=${EcsCluster} >> /etc/ecs/ecs.config
+          yum install -y aws-cfn-bootstrap
+          /opt/aws/bin/cfn-init --stack ${AWS::StackName} --resource EcsContainerInstance --region ${AWS::Region}
+
+  EcsService:
+    Type: AWS::ECS::Service
+    Properties:
+      Cluster: !Ref EcsCluster
+      DesiredCount: 1
+      TaskDefinition: !Ref EcsTaskDefinition
+
+  EcsTaskDefinition:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      ContainerDefinitions:
+      - Name: site
+        Image: blackpepper/craftcms
+        Memory: 300
+        Environment:
+        - Name: CRAFT_DATABASE_HOST
+          Value: database
+        - Name: CRAFT_DATABASE_USER
+          Value: craft
+        - Name: CRAFT_DATABASE_PASSWORD
+          Value: password
+        - Name: CRAFT_DATABASE_NAME
+          Value: craft
+        Links: [database]
+        PortMappings:
+        - HostPort: 80
+          ContainerPort: 80
+      - Name: database
+        Image: mariadb:10
+        Memory: 300
+        Environment:
+        - Name: MYSQL_ROOT_PASSWORD
+          Value: password
+        - Name: MYSQL_USER
+          Value: craft
+        - Name: MYSQL_PASSWORD
+          Value: password
+        - Name: MYSQL_DATABASE
+          Value: craft
+        PortMappings:
+        - HostPort: 3306
+          ContainerPort: 3306
+
+  EcsSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: ECS Security Group
+      VpcId: !Ref Vpc
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+
+  Ec2InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Path: /
+      Roles: [!Ref Ec2Role]
+
+  Ec2Role:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service: [ec2.amazonaws.com]
+          Action: ['sts:AssumeRole']
+      Path: /
+      Policies:
+      - PolicyName: ecs-service
+        PolicyDocument:
+          Statement:
+          - Effect: Allow
+            Action: 
+              - ecs:CreateCluster
+              - ecs:DeregisterContainerInstance
+              - ecs:DiscoverPollEndpoint
+              - ecs:Poll
+              - ecs:RegisterContainerInstance
+              - ecs:StartTelemetrySession
+              - ecs:Submit*
+            Resource: '*'
+
+Outputs:
+  Server:
+    Value: !GetAtt EcsContainerInstance.PublicIp
