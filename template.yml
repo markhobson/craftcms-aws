@@ -1,6 +1,10 @@
 AWSTemplateFormatVersion: 2010-09-09
 
 Parameters:
+  DatabaseName:
+    Type: String
+    Description: Name of the database.
+    Default: craft
   DatabaseUsername:
     Type: String
     Description: Master username for the database.
@@ -26,31 +30,46 @@ Resources:
     Properties:
       CidrBlock: 10.0.0.0/16
       
-  Subnet:
+  PublicSubnet:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref Vpc
       CidrBlock: 10.0.0.0/24
+      AvailabilityZone: eu-west-2a
       MapPublicIpOnLaunch: true
       
-  SubnetRouteTable:
+  PublicSubnetRouteTable:
     Type: AWS::EC2::RouteTable
     Properties:
       VpcId: !Ref Vpc
 
-  SubnetRouteTableAssociation:
+  PublicSubnetRouteTableAssociation:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
-      SubnetId: !Ref Subnet
-      RouteTableId: !Ref SubnetRouteTable
+      SubnetId: !Ref PublicSubnet
+      RouteTableId: !Ref PublicSubnetRouteTable
 
-  SubnetRoute:
+  PublicSubnetRoute:
     Type: AWS::EC2::Route
     Properties:
       DestinationCidrBlock: 0.0.0.0/0
       GatewayId: !Ref InternetGateway
-      RouteTableId: !Ref SubnetRouteTable
+      RouteTableId: !Ref PublicSubnetRouteTable
 
+  PrivateSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref Vpc
+      CidrBlock: 10.0.1.0/24
+      AvailabilityZone: eu-west-2a
+      
+  PrivateSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref Vpc
+      CidrBlock: 10.0.2.0/24
+      AvailabilityZone: eu-west-2b
+      
   InternetGateway:
     Type: AWS::EC2::InternetGateway
     
@@ -74,7 +93,7 @@ Resources:
       SecurityGroupIds: [!Ref EcsSecurityGroup]
       InstanceType: t2.micro
       IamInstanceProfile: !Ref Ec2InstanceProfile
-      SubnetId: !Ref Subnet
+      SubnetId: !Ref PublicSubnet
       UserData:
         Fn::Base64: !Sub |
           #!/bin/bash -xe
@@ -98,32 +117,16 @@ Resources:
         Memory: 300
         Environment:
         - Name: CRAFT_DATABASE_HOST
-          Value: database
+          Value: !GetAtt RdsInstance.Endpoint.Address
         - Name: CRAFT_DATABASE_USER
           Value: !Ref DatabaseUsername
         - Name: CRAFT_DATABASE_PASSWORD
           Value: !Ref DatabasePassword
         - Name: CRAFT_DATABASE_NAME
-          Value: craft
-        Links: [database]
+          Value: !Ref DatabaseName
         PortMappings:
         - HostPort: 80
           ContainerPort: 80
-      - Name: database
-        Image: mariadb:10
-        Memory: 300
-        Environment:
-        - Name: MYSQL_ROOT_PASSWORD
-          Value: password
-        - Name: MYSQL_USER
-          Value: !Ref DatabaseUsername
-        - Name: MYSQL_PASSWORD
-          Value: !Ref DatabasePassword
-        - Name: MYSQL_DATABASE
-          Value: craft
-        PortMappings:
-        - HostPort: 3306
-          ContainerPort: 3306
 
   EcsSecurityGroup:
     Type: AWS::EC2::SecurityGroup
@@ -166,6 +169,42 @@ Resources:
               - ecs:StartTelemetrySession
               - ecs:Submit*
             Resource: '*'
+
+  # ---------------------------------------------------------------------------
+  # RDS
+  # ---------------------------------------------------------------------------
+  
+  RdsInstance:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      AllocatedStorage: 100
+      DBInstanceClass: db.t2.small
+      DBInstanceIdentifier: !Join ['-', [!Ref 'AWS::StackName', database]]
+      DBName: !Ref DatabaseName
+      DBSubnetGroupName: !Ref RdsSubnetGroup
+      Engine: mariadb
+      MasterUsername: !Ref DatabaseUsername
+      MasterUserPassword: !Ref DatabasePassword
+      VPCSecurityGroups: [!Ref RdsSecurityGroup]
+      
+  RdsSubnetGroup:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: RDS subnet group.
+      SubnetIds:
+        - !Ref PrivateSubnet1
+        - !Ref PrivateSubnet2
+
+  RdsSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: RDS Security Group
+      VpcId: !Ref Vpc
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 3306
+          ToPort: 3306
+          CidrIp: 0.0.0.0/0
 
 Outputs:
   Server:
