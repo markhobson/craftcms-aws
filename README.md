@@ -19,7 +19,7 @@ We'll use Amazon Web Services to host your site.
 
 1. Create an [Amazon Web Services](https://aws.amazon.com/) account if you haven't already got one
 1. Create `admin` user
-1. [Create a key pair|https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html#having-ec2-create-your-key-pair] `admin-key-pair-london`
+1. [Create a key pair](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html#having-ec2-create-your-key-pair) `admin-key-pair-london`
 1. Create `ci` user
 1. Create `ci` group with policies:
 	* `AmazonEC2ContainerRegistryPowerUser`
