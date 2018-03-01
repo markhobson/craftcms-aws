@@ -95,6 +95,22 @@ To destroy the services:
 ./bin/aws-down.sh
 ```
 
+## Using CloudFormation (Experimental)
+
+There's work-in-progress to use AWS CloudFormation rather than the AWS CLI to provision the infrastructure. The CloudFormation template [template.yml](template.yml) currently deploys a vanilla CraftCMS instance to AWS ECS using RDS for the database.
+
+To create the stack:
+
+```
+aws cloudformation create-stack --stack-name craftcms-aws --template-body file://template.yml --capabilities CAPABILITY_IAM
+```
+
+To destroy the stack:
+
+```
+aws cloudformation delete-stack --stack-name craftcms-aws
+```
+
 ## TODO
 
 * Style news templates
@@ -102,8 +118,8 @@ To destroy the services:
 * Ensure database is private
 * Prod/dev environments
 * Fargate
-* CloudFormation
-* RDS
+* CloudFormation (in progress)
+* RDS (in progress)
 * DNS
 * SSL
 * Local deployment (i.e. execute .circleci/config.yml locally)
