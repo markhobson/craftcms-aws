@@ -12,6 +12,7 @@ Parameters:
   DatabasePassword:
     Type: String
     Description: Master password for the database.
+    NoEcho: true
     Default: password
 
 Mappings:
