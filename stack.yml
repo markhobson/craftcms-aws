@@ -111,33 +111,6 @@ Resources:
           yum install -y aws-cfn-bootstrap
           /opt/aws/bin/cfn-init --stack ${AWS::StackName} --resource EcsContainerInstance --region ${AWS::Region}
 
-  EcsService:
-    Type: AWS::ECS::Service
-    Properties:
-      Cluster: !Ref EcsCluster
-      DesiredCount: 1
-      TaskDefinition: !Ref EcsTaskDefinition
-
-  EcsTaskDefinition:
-    Type: AWS::ECS::TaskDefinition
-    Properties:
-      ContainerDefinitions:
-      - Name: site
-        Image: blackpepper/craftcms
-        Memory: 300
-        Environment:
-        - Name: CRAFT_DATABASE_HOST
-          Value: !GetAtt RdsInstance.Endpoint.Address
-        - Name: CRAFT_DATABASE_USER
-          Value: !Ref DatabaseUsername
-        - Name: CRAFT_DATABASE_PASSWORD
-          Value: !Ref DatabasePassword
-        - Name: CRAFT_DATABASE_NAME
-          Value: !Ref DatabaseName
-        PortMappings:
-        - HostPort: 80
-          ContainerPort: 80
-
   EcsSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
@@ -171,6 +144,12 @@ Resources:
           Statement:
           - Effect: Allow
             Action: 
+              # ECR
+              - ecr:BatchCheckLayerAvailability
+              - ecr:BatchGetImage
+              - ecr:GetDownloadUrlForLayer
+              - ecr:GetAuthorizationToken
+              # ECS
               - ecs:CreateCluster
               - ecs:DeregisterContainerInstance
               - ecs:DiscoverPollEndpoint

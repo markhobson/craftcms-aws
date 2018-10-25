@@ -1,0 +1,30 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Resources:
+  
+  EcsService:
+    Type: AWS::ECS::Service
+    Properties:
+      Cluster: !Ref EcsCluster
+      DesiredCount: 1
+      TaskDefinition: !Ref EcsTaskDefinition
+
+  EcsTaskDefinition:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      ContainerDefinitions:
+      - Name: site
+        Image: !Join ['.', [!Ref 'AWS::AccountId', dkr.ecr, !Ref 'AWS::Region', amazonaws.com/craftcms-aws]]
+        Memory: 300
+        Environment:
+        - Name: CRAFT_DATABASE_HOST
+          Value: !GetAtt RdsInstance.Endpoint.Address
+        - Name: CRAFT_DATABASE_USER
+          Value: !Ref DatabaseUsername
+        - Name: CRAFT_DATABASE_PASSWORD
+          Value: !Ref DatabasePassword
+        - Name: CRAFT_DATABASE_NAME
+          Value: !Ref DatabaseName
+        PortMappings:
+        - HostPort: 80
+          ContainerPort: 80

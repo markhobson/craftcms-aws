@@ -1,12 +1,3 @@
 #!/bin/bash
 
-# Destroy Amazon ECS
-
-ecs-cli down \
-	--force
-
-# Destroy Amazon ECR
-
-aws ecr delete-repository \
-	--repository-name craftcms-aws \
-	--force
+aws cloudformation delete-stack --stack-name craftcms-aws
