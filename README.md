@@ -113,6 +113,7 @@ aws cloudformation delete-stack --stack-name craftcms-aws
 
 ## TODO
 
+* Upgrade to Craft 3
 * Style news templates
 * Automate CircleCI primary image build in DockerHub
 * Ensure database is private
